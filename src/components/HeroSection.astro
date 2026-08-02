@@ -1,0 +1,53 @@
+---
+import { getPhotos } from '../lib/photos.js';
+const photos = getPhotos('hero');
+---
+<section class="hero" data-animate="fade-up">
+  <div class="hero-photos">
+    {photos.length > 0
+      ? photos.slice(0, 4).map((src) => <img src={src} alt="" loading="eager" />)
+      : <div class="hero-fallback"></div>}
+  </div>
+  <div class="hero-copy">
+    <h1>The Rookie Explorer</h1>
+    <p>You don't need to be rich to see the world.</p>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding: var(--space-section) var(--space-xl);
+    text-align: center;
+    overflow: hidden;
+  }
+  .hero-fallback {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--color-surface-soft), var(--color-primary-disabled));
+    z-index: -1;
+  }
+  .hero-photos {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    z-index: -1;
+    opacity: 0.5;
+  }
+  .hero-photos img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero-copy h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 var(--space-sm);
+  }
+  .hero-copy p {
+    font-size: 18px;
+    color: var(--color-body);
+    margin: 0;
+  }
+</style>

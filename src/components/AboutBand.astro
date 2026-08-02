@@ -1,0 +1,55 @@
+---
+import { getPhotos } from '../lib/photos.js';
+const photos = getPhotos('about');
+---
+<section class="about-band" data-animate="fade-up">
+  <div class="about-copy">
+    <h2>Taniya x Sumit — Budget Travel for Indians</h2>
+    <p>Real costs & smart itineraries you'll actually use. We've been sharing our trips on Instagram — now you can download the full itineraries here, free.</p>
+    <a class="ig-link" href="https://instagram.com/letsgo_taniya" target="_blank" rel="noopener">Follow @letsgo_taniya on Instagram</a>
+  </div>
+  {photos.length > 0 && (
+    <div class="about-photos">
+      {photos.slice(0, 3).map((src) => <img src={src} alt="" loading="lazy" />)}
+    </div>
+  )}
+</section>
+
+<style>
+  .about-band {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xl);
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-section) var(--space-xl);
+  }
+  .about-copy {
+    max-width: 480px;
+  }
+  .about-copy h2 {
+    font-size: 21px;
+    font-weight: 700;
+    margin: 0 0 var(--space-base);
+  }
+  .about-copy p {
+    color: var(--color-body);
+    margin: 0 0 var(--space-base);
+  }
+  .ig-link {
+    display: inline-block;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+  .about-photos {
+    display: flex;
+    gap: var(--space-sm);
+  }
+  .about-photos img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+  }
+</style>

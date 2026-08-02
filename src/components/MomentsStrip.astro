@@ -1,0 +1,24 @@
+---
+import { getPhotos } from '../lib/photos.js';
+const photos = getPhotos('moments');
+---
+{photos.length > 0 && (
+  <section class="moments-strip" data-animate="fade-up">
+    {photos.map((src) => <img src={src} alt="" loading="lazy" />)}
+  </section>
+)}
+
+<style>
+  .moments-strip {
+    display: flex;
+    gap: var(--space-base);
+    overflow-x: auto;
+    padding: var(--space-base) var(--space-xl);
+  }
+  .moments-strip img {
+    height: 220px;
+    width: auto;
+    border-radius: var(--radius-md);
+    flex-shrink: 0;
+  }
+</style>

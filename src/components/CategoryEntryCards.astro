@@ -1,0 +1,46 @@
+---
+import { withBase } from '../lib/paths.js';
+---
+<section class="category-entry" data-animate="fade-up">
+  <a class="entry-card" href={withBase('/domestic/')}>
+    <h3>Domestic</h3>
+    <p>Trips within India</p>
+  </a>
+  <a class="entry-card" href={withBase('/international/')}>
+    <h3>International</h3>
+    <p>Trips beyond India</p>
+  </a>
+</section>
+
+<style>
+  .category-entry {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-base);
+    padding: 0 var(--space-xl) var(--space-section);
+  }
+  .entry-card {
+    display: block;
+    padding: var(--space-xl);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-soft);
+    text-decoration: none;
+    color: var(--color-ink);
+    text-align: center;
+    transition: transform 0.2s ease;
+  }
+  .entry-card:hover {
+    transform: translateY(-4px);
+  }
+  .entry-card h3 {
+    margin: 0 0 var(--space-xs);
+    font-size: 20px;
+  }
+  .entry-card p {
+    margin: 0;
+    color: var(--color-muted);
+  }
+  @media (max-width: 744px) {
+    .category-entry { grid-template-columns: 1fr; }
+  }
+</style>
