@@ -1,0 +1,50 @@
+---
+const EMOJI = ['✈️', '🧳', '🗺️', '🏖️', '🎒', '🌏', '🚆', '🏔️', '📸', '🌴'];
+const COUNT = 10;
+const items = Array.from({ length: COUNT }, (_, i) => {
+  const emoji = EMOJI[i % EMOJI.length];
+  const left = Math.round((i / COUNT) * 100 + (i % 3) * 2);
+  const delay = (i * 1.7).toFixed(1);
+  const duration = (18 + (i % 5) * 3).toFixed(1);
+  return { emoji, left, delay, duration };
+});
+---
+<div class="emoji-layer" aria-hidden="true">
+  {items.map((item) => (
+    <span
+      class="emoji"
+      style={`left: ${item.left}%; animation-delay: ${item.delay}s; animation-duration: ${item.duration}s;`}
+    >
+      {item.emoji}
+    </span>
+  ))}
+</div>
+
+<style>
+  .emoji-layer {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+  }
+  .emoji {
+    position: absolute;
+    top: 100%;
+    font-size: 28px;
+    opacity: 0.18;
+    animation-name: float-up;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    will-change: transform;
+  }
+  @keyframes float-up {
+    from { transform: translateY(0); }
+    to { transform: translateY(-120vh); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .emoji-layer {
+      display: none;
+    }
+  }
+</style>

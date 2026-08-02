@@ -1,5 +1,7 @@
 ---
 import '../styles/tokens.css';
+import '../styles/motion.css';
+import { ViewTransitions } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { withBase } from '../lib/paths.js';
@@ -12,6 +14,7 @@ const { title = 'The Rookie Explorer' } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href={withBase('/favicon.svg')} />
     <title>{title}</title>
+    <ViewTransitions />
   </head>
   <body>
     <Header />
@@ -19,5 +22,8 @@ const { title = 'The Rookie Explorer' } = Astro.props;
       <slot />
     </main>
     <Footer />
+    <script>
+      import '../scripts/scroll-reveal.js';
+    </script>
   </body>
 </html>

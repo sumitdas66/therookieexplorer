@@ -1,8 +1,10 @@
 ---
 import { getPhotos } from '../lib/photos.js';
+import EmojiBackground from './EmojiBackground.astro';
 const photos = getPhotos('hero');
 ---
 <section class="hero" data-animate="fade-up">
+  <EmojiBackground />
   <div class="hero-photos">
     {photos.length > 0
       ? photos.slice(0, 4).map((src) => <img src={src} alt="" loading="eager" />)
