@@ -1,13 +1,19 @@
 ---
 import { getPhotos } from '../lib/photos.js';
 const photos = getPhotos('moments');
-const duration = photos.length * 4;
+const UNIT_REPEATS = 6;
+const duration = photos.length * UNIT_REPEATS * 4;
+const extraPasses = Array.from({ length: UNIT_REPEATS * 2 - 1 });
 ---
 {photos.length > 0 && (
   <section class="moments-strip" data-animate="fade-up">
     <div class="moments-track" style={`animation-duration: ${duration}s;`}>
-      {photos.map((src) => <img class="moment-photo" src={src} alt="" loading="lazy" />)}
-      {photos.map((src) => <img class="moment-photo moment-photo-dup" src={src} alt="" loading="lazy" aria-hidden="true" />)}
+      {photos.map((src) => <img class="moment-photo" src={src} alt="" loading="eager" />)}
+      {extraPasses.flatMap(() =>
+        photos.map((src) => (
+          <img class="moment-photo moment-photo-dup" src={src} alt="" loading="eager" aria-hidden="true" />
+        ))
+      )}
     </div>
   </section>
 )}
@@ -15,13 +21,12 @@ const duration = photos.length * 4;
 <style>
   .moments-strip {
     overflow: hidden;
-    padding: var(--space-base) 0;
+    padding: var(--space-base) var(--space-xl);
   }
   .moments-track {
     display: flex;
     gap: var(--space-base);
     width: max-content;
-    padding: 0 var(--space-xl);
     animation-name: moments-slide;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
