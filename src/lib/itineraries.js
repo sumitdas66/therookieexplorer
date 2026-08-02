@@ -4,12 +4,21 @@ import yaml from 'js-yaml';
 import { withBase } from './paths.js';
 
 const CATEGORIES = ['domestic', 'international'];
-const ITINERARIES_ROOT = path.join(process.cwd(), 'public', 'itineraries');
 const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
+let cache = null;
+
 function fail(message) {
   throw new Error(`[itineraries] ${message}`);
+}
+
+function warn(message) {
+  if (process.env.GITHUB_ACTIONS === 'true') {
+    console.log(`::warning::${message}`);
+  } else {
+    console.warn(`⚠️  ${message}`);
+  }
 }
 
 function readMeta(folderPath, folderLabel) {
@@ -20,7 +29,7 @@ function readMeta(folderPath, folderLabel) {
   const raw = fs.readFileSync(metaPath, 'utf-8');
   let parsed;
   try {
-    parsed = yaml.load(raw);
+    parsed = yaml.load(raw, { schema: yaml.JSON_SCHEMA });
   } catch (err) {
     fail(`${folderLabel}: meta.txt is not valid YAML (${err.message})`);
   }
@@ -63,12 +72,18 @@ function findSinglePdf(folderPath, folderLabel) {
 }
 
 export function getAllItineraries() {
+  if (cache !== null) {
+    return cache;
+  }
+
+  const itinerariesRoot = path.join(process.cwd(), 'public', 'itineraries');
   const results = [];
   const seenSlugs = new Set();
 
   for (const category of CATEGORIES) {
-    const categoryPath = path.join(ITINERARIES_ROOT, category);
+    const categoryPath = path.join(itinerariesRoot, category);
     if (!fs.existsSync(categoryPath)) {
+      warn(`itineraries/${category}/ does not exist`);
       continue;
     }
     const slugs = fs
@@ -121,6 +136,7 @@ export function getAllItineraries() {
     return a.date > b.date ? -1 : 1;
   });
 
+  cache = results;
   return results;
 }
 
