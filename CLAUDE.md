@@ -20,7 +20,7 @@ There is no lint or test command — none is configured for this project.
 - **Astro static site**, no server, no database. `astro.config.mjs` sets `base: '/therookieexplorer'` and `trailingSlash: 'always'` for the GitHub Pages project-page subpath.
 - **Content lives under `public/`, not a `src/content/` collection**, so Astro's build copies it into `dist/` verbatim with zero custom copy logic:
   - `public/itineraries/{domestic|international}/{slug}/` — each folder holds exactly one `itinerary.pdf`, one `meta.txt` (YAML metadata), and an optional cover image. Build-time validation in `src/lib/itineraries.js` fails loudly on a malformed slug, a slug collision, the wrong PDF count, or a missing/invalid `date`.
-  - `public/photos/{hero|about|moments}/` — site-wide personal photos, separate from itinerary covers. These ship intentionally empty (only `.gitkeep`) — no stock placeholder images were seeded, by design. Missing/empty buckets degrade gracefully at build time with a warning, never a failure.
+  - `public/photos/{hero|moments}/` — site-wide personal photos, separate from itinerary covers. `hero/` feeds the homepage hero collage; `moments/` feeds the auto-sliding photo ribbon (`MomentsStrip.astro`, a CSS-only right-to-left loop that pauses on hover and falls back to a plain scrollable strip under `prefers-reduced-motion`). Missing/empty buckets degrade gracefully at build time with a warning, never a failure. See [README.md](README.md) for the steps to add a new itinerary or photo.
 - **`src/lib/itineraries.js`** and **`src/lib/photos.js`** are the build-time content layer — plain Node modules (`fs`/`path`) imported directly into `.astro` page frontmatter. `getAllItineraries()` is memoized per build process; `date` (a `YYYY-MM-DD` string) is the only sort key for "newest first" — never git/filesystem metadata.
   - **Gotcha:** `js-yaml`'s default schema auto-coerces unquoted YAML dates (`date: 2020-01-01`) into JS `Date` objects. `itineraries.js` parses with `{ schema: yaml.JSON_SCHEMA }` specifically to prevent this — don't remove that option.
 - **`src/lib/paths.js`** exports `withBase(path)`, the single place base-path-prefixing happens. Astro's `base` config does **not** auto-rewrite hardcoded `href="/..."` strings — every internal link and content-derived URL in this project must go through `withBase()`.
@@ -30,7 +30,8 @@ There is no lint or test command — none is configured for this project.
 
 ## Workflow
 
-- Push edits directly to `main`. Do not create feature branches or PRs unless explicitly asked.
+- `main` is branch-protected: force-pushes and branch deletion are blocked, and merging requires an approving review from the code owner (`.github/CODEOWNERS` → `@sumitdas66`). Any contributor other than the repo owner must go through a pull request.
+- The repo owner (`sumitdas66`) is a GitHub admin on this repo and can still bypass the pull-request/review requirement to push directly to `main` — this is the normal way this solo project continues to be worked on day-to-day. Treat "push directly to `main`" as the default for the owner's own changes, same as before; only reach for a PR if the user explicitly asks for one or a second collaborator is involved.
 
 ## Handoff Documents
 
