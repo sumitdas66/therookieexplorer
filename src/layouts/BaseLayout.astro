@@ -4,8 +4,9 @@ import '../styles/motion.css';
 import { ViewTransitions } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import EmojiBackground from '../components/EmojiBackground.astro';
 import { withBase } from '../lib/paths.js';
-const { title = 'The Rookie Explorers' } = Astro.props;
+const { title = 'The Rookie Explorers', ambientEmoji = false } = Astro.props;
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -17,6 +18,7 @@ const { title = 'The Rookie Explorers' } = Astro.props;
     <ViewTransitions />
   </head>
   <body>
+    {ambientEmoji && <EmojiBackground />}
     <Header />
     <main>
       <slot />
