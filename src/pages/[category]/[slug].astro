@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PlaceholderCover from '../../components/PlaceholderCover.astro';
+import Button from '../../components/Button.astro';
+import { getAllItineraries } from '../../lib/itineraries.js';
+
+export function getStaticPaths() {
+  return getAllItineraries().map((itinerary) => ({
+    params: { category: itinerary.category, slug: itinerary.slug },
+    props: { itinerary },
+  }));
+}
+
+const { itinerary } = Astro.props;
+---
+<BaseLayout title={`${itinerary.title} — The Rookie Explorer`}>
+  <article class="detail" data-animate="fade-up">
+    <div class="cover">
+      {itinerary.coverImage
+        ? <img src={itinerary.coverImage} alt={itinerary.title} />
+        : <PlaceholderCover title={itinerary.title} />}
+    </div>
+    <div class="body">
+      <h1>{itinerary.title}</h1>
+      <p class="meta-line">{itinerary.duration} · {itinerary.cost}</p>
+      <p class="summary">{itinerary.summary}</p>
+      {itinerary.tags.length > 0 && (
+        <div class="tags">
+          {itinerary.tags.map((tag) => <span class="tag">{tag}</span>)}
+        </div>
+      )}
+      <Button href={itinerary.pdfUrl} variant="primary" download>Download Itinerary (PDF)</Button>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .detail {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
+    padding: var(--space-section) var(--space-xl);
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .cover img {
+    width: 100%;
+    border-radius: var(--radius-md);
+    object-fit: cover;
+  }
+  .body h1 {
+    font-size: 22px;
+    margin: 0 0 var(--space-sm);
+  }
+  .meta-line {
+    color: var(--color-muted);
+    margin: 0 0 var(--space-base);
+  }
+  .summary {
+    color: var(--color-body);
+    margin: 0 0 var(--space-lg);
+  }
+  .tags {
+    display: flex;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-size: 12px;
+    padding: var(--space-xxs) var(--space-sm);
+    border-radius: var(--radius-full);
+    background: var(--color-surface-soft);
+    color: var(--color-muted);
+  }
+  @media (max-width: 744px) {
+    .detail { grid-template-columns: 1fr; }
+  }
+</style>
