@@ -1,5 +1,5 @@
 ---
-status: in-progress
+status: completed
 ---
 
 # The Rookie Explorer — Build Handoff
@@ -14,7 +14,9 @@ Took "The Rookie Explorer" from an empty repo to a fully implemented, locally-ve
 
 Do not re-read the full plan/design docs into context unless you need a specific detail — this handoff plus the "Outstanding items" section below should be enough to resume.
 
-**Update (same day, follow-up turn):** the user dropped 9 real trip/couple photos into `screenshots/`. These were reviewed, curated across the three photo buckets (4 to `hero/` — the most visually striking/iconic shots; 3 to `about/` — couple-together warm shots; 2 to `moments/`), resized to a 1920px max dimension and re-encoded as quality-78 JPEGs via `sharp` (total size dropped from ~37MB to ~2.4MB), and EXIF-rotated images were auto-corrected in the process. All three `.gitkeep` placeholders were removed since the buckets are no longer empty. Verified live: `npm run build` now produces zero "photos/* is empty" warnings, and all 9 photo URLs were fetched in a running dev server and confirmed to return HTTP 200. Pushed as commit `84c52a2`. This resolves the photo half of Outstanding Item 2 below — the sample-itinerary half is still open.
+**Update (same day, follow-up turn 1):** the user dropped 9 real trip/couple photos into `screenshots/`. These were reviewed, curated across the three photo buckets (4 to `hero/` — the most visually striking/iconic shots; 3 to `about/` — couple-together warm shots; 2 to `moments/`), resized to a 1920px max dimension and re-encoded as quality-78 JPEGs via `sharp` (total size dropped from ~37MB to ~2.4MB), and EXIF-rotated images were auto-corrected in the process. All three `.gitkeep` placeholders were removed since the buckets are no longer empty. Verified live: `npm run build` now produces zero "photos/* is empty" warnings, and all 9 photo URLs were fetched in a running dev server and confirmed to return HTTP 200. Pushed as commit `84c52a2`. This resolves the photo half of the old Outstanding Item 2 — the sample-itinerary half is still open (see Outstanding Items below).
+
+**Update (same day, follow-up turn 2):** the user reported the GitHub Actions deploy was failing and asked to get it working. Diagnosed via `gh run list`/`gh api repos/.../pages` (returned a plain 404) that GitHub Pages had never actually been enabled on the repo — every workflow run since the first push had failed at the `deploy` job with `Error: Failed to create deployment (status: 404)`, the exact manual step flagged as Outstanding Item 1 below. With the user's explicit confirmation, enabled it via `gh api --method POST repos/sumitdas66/therookieexplorer/pages -f build_type=workflow`, then re-ran the latest failed run (`gh run rerun 30756526179`) — both `build` and `deploy` jobs went green. Confirmed live by loading `https://sumitdas66.github.io/therookieexplorer/` in the browser and checking the rendered page text matches the expected homepage content. **The site is now live and auto-deploying on every push to `main`.** This resolves old Outstanding Items 1 and 4 in full.
 
 ## Two real bugs found and fixed during review (not style nitpicks)
 
@@ -38,7 +40,7 @@ Exit implied 0 (no error output, `[build] Complete!` reached). Expected warnings
 - Clicked the "sample" tag filter chip **after** that soft navigation (the exact scenario the View Transitions bug broke) → confirmed via `document.querySelectorAll` in the browser that the chip became `active` and the matching grid item stayed visible (`hidden: false`) — the fix works.
 - Navigated directly to `/domestic/sample-kerala-backwaters/` → detail page renders title, `5 days · ₹20,000`, summary, tags, and a download link with the correct `href` (`/therookieexplorer/itineraries/domestic/sample-kerala-backwaters/itinerary.pdf`).
 
-**Not verified this session:** an actual live GitHub Pages deployment. Only local dev-server + local production build were checked. See Outstanding Item 1 below — the GitHub Pages source setting hasn't been switched yet, so the Actions workflow, even if triggered, won't currently publish anywhere.
+**Live GitHub Pages deployment** (added in follow-up turn 2): `gh run list` confirmed every prior run failed at the `deploy` job (404, Pages never enabled). After enabling Pages via the API and re-running, `gh run watch 30756526179 --exit-status` showed both `build` and `deploy` jobs completing with ✓. Loaded `https://sumitdas66.github.io/therookieexplorer/` directly and confirmed the rendered page text matches the expected homepage (hero copy, bio, both sample itineraries, category cards).
 
 ## Git state
 
@@ -57,22 +59,22 @@ Flagged by code review during this session but explicitly not fixed (reviewer ju
 
 ## Outstanding items — read this before doing anything else
 
-1. **MANUAL STEP REQUIRED, not code:** the user must switch the GitHub repo's Pages source to **"GitHub Actions"** under `Settings → Pages → Build and deployment`. Not yet confirmed done as of end of this session. The deploy workflow at `.github/workflows/deploy.yml` cannot publish anywhere until this is set.
-2. **Real photos added, sample itineraries still pending.** `public/photos/{hero,about,moments}/` now hold real, curated, optimized trip/couple photos (see the update note above) — this part is done. Two itinerary folders still exist purely for verification (`public/itineraries/domestic/sample-kerala-backwaters/`, `public/itineraries/international/sample-malaysia-kuala-lumpur/`), both clearly titled "(replace this folder)" — delete these once real trip PDFs/metadata are added.
-3. **No custom domain configured** — deliberately deferred per the design spec. Site currently targets the default `sumitdas66.github.io/therookieexplorer/` subpath.
-4. **Live deployment unverified.** After Item 1 is done, check the repo's Actions tab to confirm the workflow run is green, then load the live URL and spot-check the same golden path verified locally in this session (home → category page → tag filter after a click-navigation → detail page → PDF download).
-5. The plan file (`spec/implementation-plan/2026-08-02-rookie-explorer-plan.md`) still shows its task checkboxes as `- [ ]` (unchecked) even though all 10 tasks are implemented, reviewed, and merged — the plan document itself was never edited to reflect completion. Not a functional issue, just don't be confused by it if you open that file.
+Both original blocking items (GitHub Pages source, live deployment verification) are now resolved. What's left is optional content/polish work, not blocking anything:
+
+1. **Sample itineraries still pending real content.** `public/itineraries/domestic/sample-kerala-backwaters/` and `public/itineraries/international/sample-malaysia-kuala-lumpur/` are still placeholder data (clearly titled "(replace this folder)"). Delete these once real trip PDFs/metadata are added — no rush, they don't break anything by existing.
+2. **No custom domain configured** — deliberately deferred per the design spec. Site currently lives at the default `sumitdas66.github.io/therookieexplorer/` subpath.
+3. The plan file (`spec/implementation-plan/2026-08-02-rookie-explorer-plan.md`) still shows its task checkboxes as `- [ ]` (unchecked) even though all 10 tasks are implemented, reviewed, and merged — the plan document itself was never edited to reflect completion. Not a functional issue, just don't be confused by it if you open that file.
+4. The two deliberately-deferred non-blocking polish items from the original review are still open (see "Known, deliberately deferred, non-blocking items" above) — `aria-pressed` on filter chips, and no reserved aspect-ratio on real cover images.
 
 ## Resume point
 
-If the user wants to continue immediately: the very next thing to do is Outstanding Item 1 (switch GitHub Pages source), then Item 4 (verify the live deployment). Everything else (Items 2, 3) is content work for the user to do at their own pace, not something to proactively push on unless asked.
+The site is live and deploying automatically on every push to `main` — there is no required next action. If/when the user wants to continue: add real itinerary folders and delete the two samples, and/or consider a custom domain. Neither is something to proactively push on unless asked.
 
 **Next-session starter prompt** (paste this to resume cold):
-> Read handoff/2026-08-02-rookie-explorer-build-handoff.md. The Rookie Explorer's 10-task build is complete and pushed to main (commit 3ede9a7), verified locally. Help me confirm the GitHub Pages source is set to "GitHub Actions" and check whether the live deployment actually works end-to-end.
+> Read handoff/2026-08-02-rookie-explorer-build-handoff.md. The Rookie Explorer is fully built, deployed, and live at https://sumitdas66.github.io/therookieexplorer/. I want to [add real itinerary content / set up a custom domain / something else] — help me with that.
 
 ## Suggested skills for next session
 
-1. None required just to flip the GitHub Pages settings (that's a manual UI action for the user, not a skill).
-2. `systematic-debugging` — if the live Actions workflow run fails or the deployed site doesn't match local behavior.
-3. `brainstorming` — if/when the user wants to add a new feature (e.g., search, a custom domain, more animation) rather than just verify/ship what's built.
-4. `subagent-driven-development` — if any new feature work produces another multi-task plan, matching the pattern used this session.
+1. `brainstorming` — if/when the user wants to add a new feature (e.g., search, a custom domain, more animation) rather than just add content within the existing design.
+2. `subagent-driven-development` — if any new feature work produces another multi-task plan, matching the pattern used this session.
+3. `systematic-debugging` — if a future deploy fails or the live site diverges from local behavior.
