@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TagFilterGrid from '../../components/TagFilterGrid.astro';
+import { getItinerariesByCategory } from '../../lib/itineraries.js';
+const itineraries = getItinerariesByCategory('domestic');
+---
+<BaseLayout title="Domestic Itineraries — The Rookie Explorer">
+  <section class="page-header" data-animate="fade-up">
+    <h1>Domestic Itineraries</h1>
+  </section>
+  <div class="page-body">
+    <TagFilterGrid itineraries={itineraries} />
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding: var(--space-xl) var(--space-xl) 0;
+  }
+  .page-body {
+    padding: 0 var(--space-xl) var(--space-section);
+  }
+</style>

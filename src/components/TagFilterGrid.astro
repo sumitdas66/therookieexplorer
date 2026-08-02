@@ -1,0 +1,64 @@
+---
+import ItineraryCard from './ItineraryCard.astro';
+import TagChip from './TagChip.astro';
+const { itineraries } = Astro.props;
+const allTags = [...new Set(itineraries.flatMap((i) => i.tags))].sort();
+---
+<div class="tag-filter-grid">
+  {allTags.length > 0 && (
+    <div class="chips" role="group" aria-label="Filter by tag">
+      <TagChip label="all" active={true} />
+      {allTags.map((tag) => <TagChip label={tag} />)}
+    </div>
+  )}
+  <div class="grid" data-animate="fade-up">
+    {itineraries.map((itinerary) => (
+      <div class="grid-item" data-tags={itinerary.tags.join(',')}>
+        <ItineraryCard itinerary={itinerary} />
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  const containers = document.querySelectorAll('.tag-filter-grid');
+  containers.forEach((container) => {
+    const chips = container.querySelectorAll('.tag-chip');
+    const items = container.querySelectorAll('.grid-item');
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        chips.forEach((c) => c.classList.remove('active'));
+        chip.classList.add('active');
+        const tag = chip.dataset.tag;
+        items.forEach((item) => {
+          const tags = item.dataset.tags ? item.dataset.tags.split(',') : [];
+          const show = tag === 'all' || tags.includes(tag);
+          item.classList.toggle('hidden', !show);
+        });
+      });
+    });
+  });
+</script>
+
+<style>
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-base);
+  }
+  .grid-item.hidden {
+    display: none;
+  }
+  @media (max-width: 1128px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 744px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
