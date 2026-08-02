@@ -1,0 +1,75 @@
+---
+import PlaceholderCover from './PlaceholderCover.astro';
+import { withBase } from '../lib/paths.js';
+const { itinerary } = Astro.props;
+const detailHref = withBase(`/${itinerary.category}/${itinerary.slug}/`);
+---
+<a href={detailHref} class="itinerary-card" data-animate="fade-up">
+  <div class="cover-wrap">
+    {itinerary.coverImage
+      ? <img src={itinerary.coverImage} alt={itinerary.title} loading="lazy" />
+      : <PlaceholderCover title={itinerary.title} />}
+  </div>
+  <div class="meta">
+    <h3 class="title">{itinerary.title}</h3>
+    <p class="sub">{itinerary.duration} · {itinerary.cost}</p>
+    {itinerary.tags.length > 0 && (
+      <div class="tags">
+        {itinerary.tags.map((tag) => <span class="tag">{tag}</span>)}
+      </div>
+    )}
+  </div>
+</a>
+
+<style>
+  .itinerary-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border-radius: var(--radius-md);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .itinerary-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card);
+  }
+  .cover-wrap {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .cover-wrap img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+  .itinerary-card:hover .cover-wrap img {
+    transform: scale(1.05);
+  }
+  .meta {
+    padding-top: var(--space-base);
+  }
+  .title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 var(--space-xs);
+  }
+  .sub {
+    font-size: 14px;
+    color: var(--color-muted);
+    margin: 0 0 var(--space-sm);
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+  .tag {
+    font-size: 12px;
+    padding: var(--space-xxs) var(--space-sm);
+    border-radius: var(--radius-full);
+    background: var(--color-surface-soft);
+    color: var(--color-muted);
+  }
+</style>

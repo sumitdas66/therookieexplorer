@@ -1,0 +1,27 @@
+---
+const { label, active = false } = Astro.props;
+---
+<button type="button" class:list={['tag-chip', { active }]} data-tag={label}>
+  {label}
+</button>
+
+<style>
+  .tag-chip {
+    border: 1px solid var(--color-hairline);
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    border-radius: var(--radius-full);
+    padding: var(--space-xs) var(--space-base);
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  }
+  .tag-chip.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-on-primary);
+  }
+  .tag-chip:hover {
+    transform: translateY(-1px);
+  }
+</style>
