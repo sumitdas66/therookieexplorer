@@ -39,7 +39,7 @@ const photos = getPhotos('hero');
     grid-template-columns: repeat(4, 1fr);
     z-index: -2;
     opacity: 0.55;
-    background: var(--color-ink);
+    background: linear-gradient(135deg, var(--color-surface-soft), var(--color-primary-disabled));
   }
   .hero-photos img {
     width: 100%;
@@ -53,6 +53,7 @@ const photos = getPhotos('hero');
   .hero-copy h1 {
     font-size: 40px;
     font-weight: 700;
+    color: var(--color-primary);
     margin: 0 0 var(--space-sm);
   }
   .hero-copy p {
