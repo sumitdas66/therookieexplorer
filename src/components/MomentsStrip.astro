@@ -1,24 +1,54 @@
 ---
 import { getPhotos } from '../lib/photos.js';
-const photos = [...getPhotos('about'), ...getPhotos('moments')];
+const photos = getPhotos('moments');
+const duration = photos.length * 4;
 ---
 {photos.length > 0 && (
   <section class="moments-strip" data-animate="fade-up">
-    {photos.map((src) => <img src={src} alt="" loading="lazy" />)}
+    <div class="moments-track" style={`animation-duration: ${duration}s;`}>
+      {photos.map((src) => <img class="moment-photo" src={src} alt="" loading="lazy" />)}
+      {photos.map((src) => <img class="moment-photo moment-photo-dup" src={src} alt="" loading="lazy" aria-hidden="true" />)}
+    </div>
   </section>
 )}
 
 <style>
   .moments-strip {
+    overflow: hidden;
+    padding: var(--space-base) 0;
+  }
+  .moments-track {
     display: flex;
     gap: var(--space-base);
-    overflow-x: auto;
-    padding: var(--space-base) var(--space-xl);
+    width: max-content;
+    padding: 0 var(--space-xl);
+    animation-name: moments-slide;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    will-change: transform;
   }
-  .moments-strip img {
+  .moments-strip:hover .moments-track {
+    animation-play-state: paused;
+  }
+  .moment-photo {
     height: 220px;
     width: auto;
     border-radius: var(--radius-md);
     flex-shrink: 0;
+  }
+  @keyframes moments-slide {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .moments-strip {
+      overflow-x: auto;
+    }
+    .moments-track {
+      animation: none;
+    }
+    .moment-photo-dup {
+      display: none;
+    }
   }
 </style>
