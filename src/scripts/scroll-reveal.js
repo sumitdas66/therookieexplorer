@@ -1,6 +1,12 @@
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function initScrollReveal() {
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const targets = document.querySelectorAll('[data-animate]');
 
-if (!prefersReducedMotion) {
+  if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+    targets.forEach((el) => el.classList.add('is-visible'));
+    return;
+  }
+
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -13,7 +19,7 @@ if (!prefersReducedMotion) {
     { threshold: 0.15 }
   );
 
-  document.querySelectorAll('[data-animate]').forEach((el) => observer.observe(el));
-} else {
-  document.querySelectorAll('[data-animate]').forEach((el) => el.classList.add('is-visible'));
+  targets.forEach((el) => observer.observe(el));
 }
+
+document.addEventListener('astro:page-load', initScrollReveal);
