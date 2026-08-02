@@ -1,0 +1,7 @@
+title: "Sample Trip — Malaysia (replace this folder)"
+category: international
+date: 2020-01-02
+duration: "4 days"
+cost: "₹35,000"
+tags: [sample, placeholder]
+summary: "Placeholder itinerary used to verify the site renders correctly. Delete this folder once real trips are added."

@@ -1,0 +1,7 @@
+title: "Sample Trip — Kerala Backwaters (replace this folder)"
+category: domestic
+date: 2020-01-01
+duration: "5 days"
+cost: "₹20,000"
+tags: [sample, placeholder]
+summary: "Placeholder itinerary used to verify the site renders correctly. Delete this folder once real trips are added."
