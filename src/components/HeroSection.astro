@@ -1,17 +1,15 @@
 ---
 import { getPhotos } from '../lib/photos.js';
-import EmojiBackground from './EmojiBackground.astro';
 const photos = getPhotos('hero');
 ---
 <section class="hero" data-animate="fade-up">
-  <EmojiBackground />
   <div class="hero-photos">
     {photos.length > 0
       ? photos.slice(0, 4).map((src) => <img src={src} alt="" loading="eager" />)
       : <div class="hero-fallback"></div>}
   </div>
   <div class="hero-copy">
-    <h1>The Rookie Explorer</h1>
+    <h1>The Rookie Explorers</h1>
     <p>You don't need to be rich to see the world.</p>
   </div>
 </section>
@@ -19,6 +17,11 @@ const photos = getPhotos('hero');
 <style>
   .hero {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 85vh;
     padding: var(--space-section) var(--space-xl);
     text-align: center;
     overflow: hidden;
@@ -27,29 +30,45 @@ const photos = getPhotos('hero');
     position: absolute;
     inset: 0;
     background: linear-gradient(135deg, var(--color-surface-soft), var(--color-primary-disabled));
-    z-index: -1;
+    z-index: -2;
   }
   .hero-photos {
     position: absolute;
     inset: 0;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    z-index: -1;
-    opacity: 0.5;
+    z-index: -2;
+    opacity: 0.55;
+    background: var(--color-ink);
   }
   .hero-photos img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+  }
+  .hero-copy {
+    position: relative;
+    z-index: 1;
   }
   .hero-copy h1 {
-    font-size: 28px;
+    font-size: 40px;
     font-weight: 700;
     margin: 0 0 var(--space-sm);
   }
   .hero-copy p {
-    font-size: 18px;
+    font-size: 20px;
     color: var(--color-body);
     margin: 0;
+  }
+  @media (max-width: 744px) {
+    .hero {
+      min-height: 70vh;
+    }
+    .hero-photos {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .hero-copy h1 {
+      font-size: 30px;
+    }
   }
 </style>

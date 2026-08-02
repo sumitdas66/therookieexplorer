@@ -1,6 +1,6 @@
 ---
 import { getPhotos } from '../lib/photos.js';
-const photos = getPhotos('moments');
+const photos = [...getPhotos('about'), ...getPhotos('moments')];
 ---
 {photos.length > 0 && (
   <section class="moments-strip" data-animate="fade-up">

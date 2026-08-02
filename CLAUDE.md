@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project status
 
-Scaffolded and implemented: a static Astro site, "The Rookie Explorer," deployed to GitHub Pages. Full architecture rationale lives in `spec/implementation-design/2026-08-02-rookie-explorer-design.md`; the implementation plan (10 tasks, all complete) is in `spec/implementation-plan/2026-08-02-rookie-explorer-plan.md`. There are no automated tests in this project — that was an explicit, deliberate decision for this build, not an oversight.
+Scaffolded and implemented: a static Astro site, "The Rookie Explorers," deployed to GitHub Pages. Full architecture rationale lives in `spec/implementation-design/2026-08-02-rookie-explorer-design.md`; the implementation plan (10 tasks, all complete) is in `spec/implementation-plan/2026-08-02-rookie-explorer-plan.md`. There are no automated tests in this project — that was an explicit, deliberate decision for this build, not an oversight.
 
 ## Commands
 

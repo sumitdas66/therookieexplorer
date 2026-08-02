@@ -1,19 +1,20 @@
 ---
-const EMOJI = ['✈️', '🧳', '🗺️', '🏖️', '🎒', '🌏', '🚆', '🏔️', '📸', '🌴'];
-const COUNT = 10;
+const EMOJI = ['✈️', '🧳', '🗺️', '🏖️', '🎒', '🌏', '🚆', '🏔️', '📸', '🌴', '🧭', '🏝️', '🚗', '⛺', '🎡', '🚌', '🛶', '🌅'];
+const COUNT = 18;
 const items = Array.from({ length: COUNT }, (_, i) => {
   const emoji = EMOJI[i % EMOJI.length];
   const left = Math.round((i / COUNT) * 100 + (i % 3) * 2);
-  const delay = (i * 1.7).toFixed(1);
-  const duration = (18 + (i % 5) * 3).toFixed(1);
-  return { emoji, left, delay, duration };
+  const delay = (i * 1.1).toFixed(1);
+  const duration = (16 + (i % 5) * 3).toFixed(1);
+  const size = 22 + (i % 3) * 6;
+  return { emoji, left, delay, duration, size };
 });
 ---
 <div class="emoji-layer" aria-hidden="true">
   {items.map((item) => (
     <span
       class="emoji"
-      style={`left: ${item.left}%; animation-delay: ${item.delay}s; animation-duration: ${item.duration}s;`}
+      style={`left: ${item.left}%; font-size: ${item.size}px; animation-delay: ${item.delay}s; animation-duration: ${item.duration}s;`}
     >
       {item.emoji}
     </span>
@@ -22,17 +23,18 @@ const items = Array.from({ length: COUNT }, (_, i) => {
 
 <style>
   .emoji-layer {
-    position: absolute;
+    position: fixed;
     inset: 0;
+    height: 100vh;
     overflow: hidden;
     pointer-events: none;
-    z-index: -1;
+    z-index: 2;
   }
   .emoji {
     position: absolute;
     top: 100%;
-    font-size: 28px;
-    opacity: 0.18;
+    opacity: 0.4;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
     animation-name: float-up;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
